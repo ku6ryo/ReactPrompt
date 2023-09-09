@@ -1,5 +1,5 @@
 import styles from "./style.module.scss"
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { createPortal } from "react-dom"
 
 type Props = {
@@ -15,15 +15,15 @@ export function Prompt({
   onChange: onValueChange,
   onClose
 }: Props) {
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     onValueChange(e.target.value)
-  }
-  const onOkClick = () => {
+  }, [onValueChange])
+  const onOkClick = useCallback(() => {
     onClose(value)
-  }
-  const onCancelClick = () => {
+  }, [value, onClose])
+  const onCancelClick = useCallback(() => {
     onClose(null)
-  }
+  }, [onClose])
   return createPortal((
     open && (
       <div className={styles.cover}>
@@ -45,12 +45,12 @@ export function usePrompt() {
   const [open, setOpen] = useState<boolean>(false)
   const [value, setValue] = useState<string>("")
   const onCloseRef = useRef<(value: string | null) => void>()
-  const onClose = (value: string | null) => {
+  const onClose = useCallback((value: string | null) => {
     setOpen(false)
     if (onCloseRef.current) {
       onCloseRef.current(value)
     }
-  }
+  }, [setOpen, onCloseRef])
   const onChange = (value: string) => {
     setValue(value)
   }
