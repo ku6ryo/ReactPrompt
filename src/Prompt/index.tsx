@@ -9,6 +9,9 @@ type Props = {
   onClose: (value: string | null) => void
 }
 
+/**
+ * UI implentation of the prompt.
+ */
 export function Prompt({
   open,
   value,
@@ -41,6 +44,10 @@ export function Prompt({
   ), document.body)
 }
 
+/**
+ * Please use this function to use the prompt.
+ * @returns State of opening and closing and UI as React.Portal
+ */
 export function usePrompt() {
   const [open, setOpen] = useState<boolean>(false)
   const [value, setValue] = useState<string>("")
